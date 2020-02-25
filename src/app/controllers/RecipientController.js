@@ -1,8 +1,8 @@
 import * as Yup from 'yup';
 
-import Recipients from '../models/Recipients';
+import Recipient from '../models/Recipient';
 
-class RecipientsController {
+class RecipientController {
   async store(req, res) {
     const schema = Yup.object().shape({
       name: Yup.string().required(),
@@ -18,7 +18,7 @@ class RecipientsController {
       return res.status(400).json({ error: 'Validation fails' });
     }
 
-    const recipients = await Recipients.create(req.body);
+    const recipients = await Recipient.create(req.body);
 
     return res.json(recipients);
   }
@@ -38,7 +38,7 @@ class RecipientsController {
       return res.status(400).json({ error: 'Validation fails' });
     }
 
-    const recipient = await Recipients.findByPk(req.params.id);
+    const recipient = await Recipient.findByPk(req.params.id);
 
     const recipientUpdate = await recipient.update(req.body);
 
@@ -46,4 +46,4 @@ class RecipientsController {
   }
 }
 
-export default new RecipientsController();
+export default new RecipientController();
