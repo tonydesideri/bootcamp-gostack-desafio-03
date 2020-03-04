@@ -3,6 +3,7 @@ import User from '../models/User';
 import Delivery from '../models/Delivery';
 import Recipient from '../models/Recipient';
 import Deliveryman from '../models/Deliveryman';
+import NotificationSchema from '../schemas/NotificationSchema';
 
 class DeliveryController {
   async index(req, res) {
@@ -48,10 +49,19 @@ class DeliveryController {
     });
 
     if (checkDeliveryExists) {
-      return res.status(400).json({ error: 'Order already registered.' });
+      return res.status(400).json({ error: 'Order already registred.' });
     }
 
     const delivery = await Delivery.create(req.body);
+
+    if (delivery) {
+      const recipient = await Recipient.findByPk(recipient_id);
+      const deliveryman = await Deliveryman.findByPk(deliveryman_id);
+      await NotificationSchema.create({
+        content: `Nova entrega na ${recipient.street} número ${recipient.number} para ${recipient.name}. Entregador: ${deliveryman.name}`,
+        deliveryman_id,
+      });
+    }
 
     return res.json(delivery);
   }
