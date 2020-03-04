@@ -1,0 +1,34 @@
+import { getTime, format } from 'date-fns';
+import Delivery from '../models/Delivery';
+
+class DeliveryCheckInController {
+  async update(req, res) {
+    const deliveryId = req.params.id;
+
+    if (!deliveryId) {
+      return res.status(400).json({ error: 'Not Found' });
+    }
+
+    const date = new Date();
+    const dateFormat = format(getTime(date), 'HH:mm:ss');
+    if (!(dateFormat > '08:00:00' && dateFormat < '18:00:00')) {
+      return res.status(401).json({ error: 'Time not available for pickup' });
+    }
+
+    const delivery = await Delivery.findByPk(deliveryId);
+
+    const checkIn = delivery.start_date;
+    if (checkIn) {
+      return res
+        .status(400)
+        .json({ error: 'Product has already been withdrawn' });
+    }
+
+    delivery.start_date = date;
+    await delivery.save();
+
+    return res.json(delivery);
+  }
+}
+
+export default new DeliveryCheckInController();
