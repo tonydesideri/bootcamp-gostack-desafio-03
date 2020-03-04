@@ -5,6 +5,9 @@ import Recipient from '../models/Recipient';
 import Deliveryman from '../models/Deliveryman';
 import NotificationSchema from '../schemas/NotificationSchema';
 
+import NotificationMail from '../jobs/NotificationMail';
+import Queue from '../../lib/Queue';
+
 class DeliveryController {
   async index(req, res) {
     return res.json();
@@ -34,8 +37,8 @@ class DeliveryController {
       return res.status(400).json({ error: 'Recipient does not exist.' });
     }
 
-    const checkDeliverumanExists = await Deliveryman.findByPk(deliveryman_id);
-    if (!checkDeliverumanExists) {
+    const checkDeliverymanExists = await Deliveryman.findByPk(deliveryman_id);
+    if (!checkDeliverymanExists) {
       return res.status(400).json({ error: 'Deliveryman does not exist.' });
     }
 
@@ -60,6 +63,12 @@ class DeliveryController {
       await NotificationSchema.create({
         content: `Nova entrega na ${recipient.street} número ${recipient.number} para ${recipient.name}. Entregador: ${deliveryman.name}`,
         deliveryman_id,
+      });
+
+      await Queue.add(NotificationMail.key, {
+        delivery,
+        recipient,
+        deliveryman,
       });
     }
 
