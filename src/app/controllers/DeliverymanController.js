@@ -1,16 +1,9 @@
 import * as Yup from 'yup';
 import Deliveryman from '../models/Deliveryman';
-import User from '../models/User';
 import File from '../models/File';
 
 class DeliverymanController {
   async index(req, res) {
-    const user = await User.findByPk(req.userId);
-
-    if (user.email !== 'admin@fastfeet.com') {
-      return res.status(401).json({ error: 'Is not administrator' });
-    }
-
     const { page = 1 } = req.query;
 
     const deliverymans = await Deliveryman.findAll({
@@ -30,12 +23,6 @@ class DeliverymanController {
   }
 
   async store(req, res) {
-    const user = await User.findByPk(req.userId);
-
-    if (user.email !== 'admin@fastfeet.com') {
-      return res.status(401).json({ error: 'Is not administrator' });
-    }
-
     const schema = Yup.object().shape({
       name: Yup.string().required(),
       email: Yup.string()
@@ -61,12 +48,6 @@ class DeliverymanController {
   }
 
   async update(req, res) {
-    const user = await User.findByPk(req.userId);
-
-    if (user.email !== 'admin@fastfeet.com') {
-      return res.status(401).json({ error: 'Is not administrator' });
-    }
-
     const schema = Yup.object().shape({
       name: Yup.string(),
       email: Yup.string().email(),
@@ -101,12 +82,6 @@ class DeliverymanController {
   }
 
   async delete(req, res) {
-    const user = await User.findByPk(req.userId);
-
-    if (user.email !== 'admin@fastfeet.com') {
-      return res.status(401).json({ error: 'Is not administrator' });
-    }
-
     const deliveryman = await Deliveryman.findByPk(req.params.id);
 
     if (!deliveryman) {

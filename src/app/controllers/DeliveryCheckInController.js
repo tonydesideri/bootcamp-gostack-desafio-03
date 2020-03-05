@@ -17,6 +17,10 @@ class DeliveryCheckInController {
 
     const delivery = await Delivery.findByPk(deliveryId);
 
+    if (!delivery) {
+      return res.status(400).json({ error: 'Delivery not found' });
+    }
+
     const checkIn = delivery.start_date;
     if (checkIn) {
       return res

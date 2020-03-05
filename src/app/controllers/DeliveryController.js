@@ -1,5 +1,4 @@
 import * as Yup from 'yup';
-import User from '../models/User';
 import Delivery from '../models/Delivery';
 import Recipient from '../models/Recipient';
 import Deliveryman from '../models/Deliveryman';
@@ -11,12 +10,6 @@ import Queue from '../../lib/Queue';
 
 class DeliveryController {
   async index(req, res) {
-    const user = await User.findByPk(req.userId);
-
-    if (user.email !== 'admin@fastfeet.com') {
-      return res.status(401).json({ error: 'Is not administrator' });
-    }
-
     const deliveries = await Delivery.findAll({
       where: {
         canceled_at: null,
@@ -48,12 +41,6 @@ class DeliveryController {
   }
 
   async store(req, res) {
-    const user = await User.findByPk(req.userId);
-
-    if (user.email !== 'admin@fastfeet.com') {
-      return res.status(401).json({ error: 'Is not administrator' });
-    }
-
     const schema = Yup.object().shape({
       product: Yup.string().required(),
       recipient_id: Yup.number().required(),
@@ -110,12 +97,6 @@ class DeliveryController {
   }
 
   async update(req, res) {
-    const user = await User.findByPk(req.userId);
-
-    if (user.email !== 'admin@fastfeet.com') {
-      return res.status(401).json({ error: 'Is not administrator' });
-    }
-
     const schema = Yup.object().shape({
       product: Yup.string(),
       recipient_id: Yup.number().required(),
@@ -163,12 +144,6 @@ class DeliveryController {
   }
 
   async delete(req, res) {
-    const user = await User.findByPk(req.userId);
-
-    if (user.email !== 'admin@fastfeet.com') {
-      return res.status(401).json({ error: 'Is not administrator' });
-    }
-
     const delivery = await Delivery.findByPk(req.params.id, {
       include: [
         {
