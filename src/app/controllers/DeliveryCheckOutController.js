@@ -45,6 +45,7 @@ class DeliveryCheckOutController {
     }
 
     delivery.end_date = new Date();
+    delivery.signature_id = signature_id;
     await delivery.save();
 
     return res.json(delivery);

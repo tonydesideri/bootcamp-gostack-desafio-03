@@ -10,6 +10,7 @@ import DeliveryController from './app/controllers/DeliveryController';
 import DeliveryCheckInController from './app/controllers/DeliveryCheckInController';
 import DeliveryCheckOutController from './app/controllers/DeliveryCheckOutController';
 import SignatureController from './app/controllers/SignatureController';
+import DeliverymanDelivery from './app/controllers/DeliverymanDelivery';
 
 import authMiddleware from './app/middlewares/auth';
 import adminMiddleware from './app/middlewares/admin';
@@ -20,6 +21,8 @@ const upload = multer(multerConfig);
 routes.post('/sessions', SessionController.store);
 routes.put('/deliveries/:id/checkin', DeliveryCheckInController.update);
 routes.put('/deliveries/:id/checkout', DeliveryCheckOutController.update);
+
+routes.get('/deliveryman/:id/deliveries', DeliverymanDelivery.index);
 
 routes.post(
   '/signature',

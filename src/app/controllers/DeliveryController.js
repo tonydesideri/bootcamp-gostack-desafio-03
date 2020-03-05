@@ -10,12 +10,16 @@ import Queue from '../../lib/Queue';
 
 class DeliveryController {
   async index(req, res) {
+    const { page = 1 } = req.query;
+
     const deliveries = await Delivery.findAll({
       where: {
         canceled_at: null,
       },
       order: ['created_at'],
       attributes: ['product'],
+      limit: 10,
+      offset: (page - 1) * 10,
       include: [
         {
           model: Recipient,
