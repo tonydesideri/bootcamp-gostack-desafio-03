@@ -10,7 +10,8 @@ import DeliveryController from './app/controllers/DeliveryController';
 import DeliveryCheckInController from './app/controllers/DeliveryCheckInController';
 import DeliveryCheckOutController from './app/controllers/DeliveryCheckOutController';
 import SignatureController from './app/controllers/SignatureController';
-import DeliverymanDelivery from './app/controllers/DeliverymanDelivery';
+import DeliverymanDeliveriesController from './app/controllers/DeliverymanDeliveriesController';
+import DeliveryProblemController from './app/controllers/DeliveryProblemController';
 
 import authMiddleware from './app/middlewares/auth';
 import adminMiddleware from './app/middlewares/admin';
@@ -22,13 +23,21 @@ routes.post('/sessions', SessionController.store);
 routes.put('/deliveries/:id/checkin', DeliveryCheckInController.update);
 routes.put('/deliveries/:id/checkout', DeliveryCheckOutController.update);
 
-routes.get('/deliveryman/:id/deliveries', DeliverymanDelivery.index);
+routes.get(
+  '/deliveryman/:id/deliveries',
+  DeliverymanDeliveriesController.index
+);
 
 routes.post(
   '/signature',
   upload.single('signature'),
   SignatureController.store
 );
+
+/**
+ * Cadastro de problemas informando o id da encomenda
+ */
+routes.post('/delivery/:id/problems', DeliveryProblemController.store);
 
 routes.use(authMiddleware);
 

@@ -4,7 +4,7 @@ import Deliveryman from '../models/Deliveryman';
 import Signature from '../models/File';
 import Recipient from '../models/Recipient';
 
-class DeliverymanDelivery {
+class DeliverymanDeliveriesController {
   async index(req, res) {
     const { delivered, page = 1 } = req.query;
 
@@ -42,4 +42,4 @@ class DeliverymanDelivery {
     return res.json(deliverymanDeliveries);
   }
 }
-export default new DeliverymanDelivery();
+export default new DeliverymanDeliveriesController();
