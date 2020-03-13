@@ -12,7 +12,7 @@ class DeliveryCheckInController {
 
     const date = new Date();
     const dateFormat = format(getTime(date), 'HH:mm:ss');
-    if (!(dateFormat > '08:00:00' && dateFormat < '20:00:00')) {
+    if (!(dateFormat > '08:00:00' && dateFormat < '18:00:00')) {
       return res.status(401).json({ error: 'Time not available for pickup' });
     }
 

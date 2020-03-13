@@ -12,6 +12,7 @@ import DeliveryCheckOutController from './app/controllers/DeliveryCheckOutContro
 import SignatureController from './app/controllers/SignatureController';
 import DeliverymanDeliveriesController from './app/controllers/DeliverymanDeliveriesController';
 import DeliveryProblemController from './app/controllers/DeliveryProblemController';
+import deliveryShowProblemsController from './app/controllers/DeliveryShowProblemsController';
 
 import authMiddleware from './app/middlewares/auth';
 import adminMiddleware from './app/middlewares/admin';
@@ -35,8 +36,9 @@ routes.post(
 );
 
 /**
- * Cadastro de problemas informando o id da encomenda
+ * Problemas informando o id da encomenda
  */
+routes.get('/delivery/:id/problems', deliveryShowProblemsController.index);
 routes.post('/delivery/:id/problems', DeliveryProblemController.store);
 
 routes.use(authMiddleware);
@@ -57,6 +59,12 @@ routes.get('/deliveries', adminMiddleware, DeliveryController.index);
 routes.post('/deliveries', adminMiddleware, DeliveryController.store);
 routes.put('/deliveries/:id', adminMiddleware, DeliveryController.update);
 routes.delete('/deliveries/:id', adminMiddleware, DeliveryController.delete);
+
+routes.get(
+  '/deliveries/problems',
+  adminMiddleware,
+  DeliveryProblemController.index
+);
 
 routes.post('/files', upload.single('file'), FileController.store);
 
