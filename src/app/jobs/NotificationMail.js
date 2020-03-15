@@ -1,6 +1,6 @@
 import Mail from '../../lib/Mail';
 
-class CancellationMail {
+class NotificationMail {
   get key() {
     return 'NotificationMail';
   }
@@ -23,4 +23,4 @@ class CancellationMail {
   }
 }
 
-export default new CancellationMail();
+export default new NotificationMail();

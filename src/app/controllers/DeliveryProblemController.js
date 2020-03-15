@@ -3,6 +3,10 @@ import { Sequelize, Op } from 'sequelize';
 import DeliveryProblem from '../models/DeliveryProblem';
 import Delivery from '../models/Delivery';
 import Deliveryman from '../models/Deliveryman';
+import Recipient from '../models/Recipient';
+
+import CancellationMail from '../jobs/CancellationMail';
+import Queue from '../../lib/Queue';
 
 class DeliveryProblemController {
   async index(req, res) {
@@ -56,6 +60,46 @@ class DeliveryProblemController {
     });
 
     return res.json(deliveryProblem);
+  }
+
+  async delete(req, res) {
+    const { id } = req.params;
+
+    const deliveryProblem = await DeliveryProblem.findByPk(id);
+
+    if (!deliveryProblem) {
+      return res.status(400).json({ error: 'Problem does not exists' });
+    }
+
+    const { delivery_id } = deliveryProblem;
+
+    const delivery = await Delivery.findByPk(delivery_id, {
+      include: [
+        {
+          model: Deliveryman,
+          as: 'deliveryman',
+          attributes: ['name'],
+        },
+        {
+          model: Recipient,
+          as: 'recipient',
+          attributes: ['name', 'street', 'number'],
+        },
+      ],
+    });
+
+    if (delivery.canceled_at || delivery.end_date) {
+      return res.json(delivery);
+    }
+
+    delivery.canceled_at = new Date();
+    delivery.save();
+
+    await Queue.add(CancellationMail.key, {
+      delivery,
+    });
+
+    return res.json(delivery);
   }
 }
 

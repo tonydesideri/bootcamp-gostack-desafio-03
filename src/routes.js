@@ -65,6 +65,11 @@ routes.get(
   adminMiddleware,
   DeliveryProblemController.index
 );
+routes.delete(
+  '/problem/:id/cancel-delivery',
+  adminMiddleware,
+  DeliveryProblemController.delete
+);
 
 routes.post('/files', upload.single('file'), FileController.store);
 
