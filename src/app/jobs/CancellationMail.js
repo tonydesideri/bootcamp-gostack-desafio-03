@@ -11,7 +11,7 @@ class CancellationMail {
     await Mail.sendMail({
       to: `${delivery.deliveryman.name} <${delivery.deliveryman.email}>`,
       subject: 'Novo Cancelamento',
-      template: 'cancelation',
+      template: 'cancellation',
       context: {
         deliverymanName: delivery.deliveryman.name,
         product: delivery.product,

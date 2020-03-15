@@ -78,12 +78,12 @@ class DeliveryProblemController {
         {
           model: Deliveryman,
           as: 'deliveryman',
-          attributes: ['name'],
+          attributes: ['id', 'name', 'email'],
         },
         {
           model: Recipient,
           as: 'recipient',
-          attributes: ['name', 'street', 'number'],
+          attributes: ['id', 'name', 'street', 'number'],
         },
       ],
     });
